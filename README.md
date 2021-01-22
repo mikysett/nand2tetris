@@ -7,5 +7,6 @@ If you have better/different implementations please reach out in order to compar
 
 Solved exercises:
 01 - Boolean Logic
+02 - Boolean Arithmetic
 
 The tools and initial setup for the exercises can be found here: https://www.nand2tetris.org/

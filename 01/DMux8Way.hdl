@@ -16,6 +16,7 @@ CHIP DMux8Way {
     OUT a, b, c, d, e, f, g, h;
 
     PARTS:
+    // OLD IMPLEMENTATION
     // Not(in=sel[0], out=nsel0);
     // Not(in=sel[1], out=nsel1);
     // Not(in=sel[2], out=nsel2);

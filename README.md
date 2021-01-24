@@ -9,5 +9,6 @@ Solved exercises:
 01 - Boolean Logic
 02 - Boolean Arithmetic
 03 - Sequencial Logic
+04 - Machine Language
 
 The tools and initial setup for the exercises can be found here: https://www.nand2tetris.org/

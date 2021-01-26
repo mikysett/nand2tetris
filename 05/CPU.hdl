@@ -25,6 +25,9 @@
  * than to the address resulting from executing the current instruction. 
  */
 
+//  instruction[15] = 0 -> A instruction
+//  instruction[15] = 1 -> C instruction
+
 CHIP CPU {
 
     IN  inM[16],         // M value input  (M = contents of RAM[A])
@@ -39,5 +42,67 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    // Put your code here:
+    Nand(a=instruction[15], b=instruction[15], out=isA);
+    Not(in=isA, out=isC);
+
+    ARegister(in=valueA, load=loadInA, out=aReg, out[0..14]=addressM);
+    DRegister(in=valueD, load=loadInD, out=dReg);
+
+    Mux16(a=aReg, b=inM, sel=instruction[12], out=secParam);
+    ALU(
+        x=dReg, // 16-bit inputs  
+        y=secParam, // 16-bit inputs
+
+        zx=instruction[11], // zero the x input?
+        nx=instruction[10], // negate the x input?
+        zy=instruction[9], // zero the y input?
+        ny=instruction[8], // negate the y input?
+        f=instruction[7], // compute out = x + y (if 1) or x & y (if 0)
+        no=instruction[6], // negate the out output?
+
+        out=outALU, // 16-bit output
+        out=outM, // 16-bit output
+        zr=jeq, // 1 if (out == 0), 0 otherwise
+        ng=jlt // 1 if (out < 0),  0 otherwise
+    );
+    Mux(a=false, b=isC, sel=instruction[3], out=writeM);
+    Mux(a=false, b=isC, sel=instruction[4], out=loadInD);
+    Mux(a=instruction[5], b=true, sel=isA, out=loadInA);
+
+    // For optimization outM can be ignored when not requested
+    // So outM is now directly on the out of the ALU
+    // Mux16(a=false, b=outALU, sel=instruction[15], out=outM);
+    Mux16(a=dReg, b=outALU, sel=instruction[4], out=valueD);
+    Mux16(
+        a[0..14]=instruction[0..14],
+        b=outALU,
+        sel=instruction[15],
+        out=valueA);
+    
+    Not(in=jlt, out=jge);
+    Not(in=jeq, out=jne);
+    And(a=jge, b=jne, out=jgt);
+    Not(in=jgt, out=jle);
+
+    // For performance it's maybe better to create
+    // a Mux8Way chip since we only use a bit here
+    Mux8Way16(
+        a=false,
+        b[0]=jgt,
+        c[0]=jeq,
+        d[0]=jge,
+        e[0]=jlt,
+        f[0]=jne,
+        g[0]=jle,
+        h=true,
+        sel=instruction[0..2],
+        out[0]=jumpable);
+    Mux(a=jumpable, b=false, sel=isA, out=isJump);
+
+    PC(
+        in=aReg,
+        load=isJump,
+        inc=true,
+        reset=reset,
+        out[0..14]=pc);
 }

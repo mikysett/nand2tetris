@@ -11,5 +11,6 @@ Solved exercises:
 03 - Sequencial Logic
 04 - Machine Language
 05 - Computer Architecture
+06 - Assembler
 
 The tools and initial setup for the exercises can be found here: https://www.nand2tetris.org/

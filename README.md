@@ -19,6 +19,7 @@ Solved exercises:
 
 06 - Assembler
 
+07 - Virtual Machine I
 
 
 The tools and initial setup for the exercises can be found here: https://www.nand2tetris.org/

@@ -58,7 +58,6 @@ typedef struct s_sbl
 
 int			errorExit(int err);
 char		**ft_split(char const *s, char c);
-char		*ft_itoa(int n);
 int			parser(FILE *srcFile, t_cmd **commands, char *file_name);
 void		code(FILE* dst_f, t_cmd **commands);
 

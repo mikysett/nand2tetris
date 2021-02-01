@@ -70,7 +70,7 @@ static char	*set_dst_name(char *src)
 	ext_pos[1] = 'a';
 	ext_pos[2] = 's';
 	ext_pos[3] = 'm';
-	ext_pos[5] = '\0';
+	ext_pos[4] = '\0';
 	return (dst_name);
 }
 

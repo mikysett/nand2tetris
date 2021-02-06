@@ -109,6 +109,7 @@ static void		ft_set_variables(t_cmd **commands, t_sbl **symbols)
 	}
 }
 
+DEBUG_CODE(
 static void		ft_print_sbls(t_sbl **sbl)
 {
 	t_sbl	*curr;
@@ -121,7 +122,7 @@ static void		ft_print_sbls(t_sbl **sbl)
 		curr = curr->next;
 	}
 	printf("\n");
-}
+})
 
 void			symbol_table(t_cmd **commands, t_sbl **symbols)
 {

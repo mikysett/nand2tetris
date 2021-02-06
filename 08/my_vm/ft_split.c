@@ -1,16 +1,19 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: msessa <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/17 17:26:17 by msessa            #+#    #+#             */
-/*   Updated: 2021/01/27 19:06:45 by msessa           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "vmtranslator.h"
+
+void			ft_free_split(char **split_result)
+{
+	int i;
+
+	if (!split_result)
+		return ;
+	i = 0;
+	while (split_result[i])
+	{
+		free(split_result[i]);
+		i++;
+	}
+	free(split_result);
+}
 
 static int		ft_nb_strs(char const *s, char c)
 {
@@ -80,18 +83,7 @@ static void		ft_cpy_strs(char **strs, char const *str, char c)
 
 static char		**ft_free_exit(char **res, int *strs_size)
 {
-	int i;
-
-	if (res)
-	{
-		i = 0;
-		while (res[i])
-		{
-			free(res[i]);
-			i++;
-		}
-		free(res);
-	}
+	ft_free_split(res);
 	if (strs_size)
 		free(strs_size);
 	return (0);

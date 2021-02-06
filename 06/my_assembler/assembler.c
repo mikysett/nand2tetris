@@ -31,6 +31,7 @@ static int	errorExit(int err)
 	}
 }
 
+DEBUG_CODE(
 static void	ft_print_cmd(t_cmd **commands)
 {
 	t_cmd *curr;
@@ -57,7 +58,7 @@ static void	ft_print_cmd(t_cmd **commands)
 		curr = curr->next;
 		nb_l++;
 	}
-}
+})
 
 static char	*set_dst_name(char *src)
 {
@@ -75,6 +76,48 @@ static char	*set_dst_name(char *src)
 	ext_pos[4] = 'k';
 	ext_pos[5] = '\0';
 	return (dst_name);
+}
+
+static void	ft_free_cmd(t_cmd **cmd)
+{
+	t_cmd *curr;
+	t_cmd *next;
+
+	curr = *cmd;
+	while (curr)
+	{
+		next = curr->next;
+		if (curr->symbol)
+			free(curr->symbol);
+		if (curr->dest)
+			free(curr->dest);
+		if (curr->comp)
+			free(curr->comp);
+		if (curr->jmp)
+			free(curr->jmp);
+		free(curr);
+		curr = next;
+	}
+	if (cmd)
+		free(cmd);
+}
+
+static void	ft_free_sbl(t_sbl **sbl)
+{
+	t_sbl *curr;
+	t_sbl *next;
+
+	curr = *sbl;
+	while (curr)
+	{
+		next = curr->next;
+		if (curr->symbol)
+			free(curr->symbol);
+		free(curr);
+		curr = next;
+	}
+	if (sbl)
+		free(sbl);
 }
 
 int			main(int argc, char **argv)
@@ -114,5 +157,8 @@ int			main(int argc, char **argv)
 		return (errorExit(ERR_DST_FILE));
 	code(dstFile, commands, symbols);
 	fclose(dstFile);
+	
+	ft_free_cmd(commands);
+	ft_free_sbl(symbols);
 	return (0);
 }

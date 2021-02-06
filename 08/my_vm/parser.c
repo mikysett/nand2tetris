@@ -60,22 +60,6 @@ static void		ft_lstadd_back(t_cmd **lst, t_cmd *new)
 	(*lst)->next = new;
 }
 
-static void		ft_free_split(char **args)
-{
-	int i;
-
-	if (args)
-	{
-		i = 0;
-		while (args[i])
-		{
-			free(args[i]);
-			i++;
-		}
-		free(args);
-	}
-}
-
 static int		ft_count_args(char **args)
 {
 	int i;

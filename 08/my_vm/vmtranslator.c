@@ -134,6 +134,28 @@ static char	**ft_set_src_files(char *path, char *file)
 	return (ft_split(src_files, '#'));
 }
 
+static void	ft_free_cmd(t_cmd **cmd)
+{
+	t_cmd *curr;
+	t_cmd *next;
+
+	curr = *cmd;
+	while (curr)
+	{
+		next = curr->next;
+		if (curr->file_name)
+			free(curr->file_name);
+		if (curr->arg1)
+			free(curr->arg1);
+		if (curr->arg2)
+			free(curr->arg2);
+		free(curr);
+		curr = next;
+	}
+	if (cmd)
+		free(cmd);
+}
+
 int			main(int argc, char **argv)
 {
 	FILE	*srcFile;
@@ -182,8 +204,12 @@ int			main(int argc, char **argv)
 	if (!dstFile)
 		return (errorExit(ERR_DST_FILE));
 	code(dstFile, commands);
-
-	free(dst_name);
 	fclose(dstFile);
+
+	ft_free_split(src_files);
+	free(path);
+	free(file);
+	free(dst_name);
+	ft_free_cmd(commands);
 	return (0);
 }

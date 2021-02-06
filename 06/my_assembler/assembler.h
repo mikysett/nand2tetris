@@ -1,13 +1,20 @@
 #ifndef ASSEMBLER_H
 # define ASSEMBLER_H
+
 # define DEBUG_MODE		0
-# define DEBUG_CODE(x)	if (DEBUG_MODE) { x }
+# if DEBUG_MODE == 1
+#  define DEBUG_CODE(x)	x
+# else
+#  define DEBUG_CODE(x)
+# endif
+
 # define MAX_LINE_SIZE	160
 # define ERR_NO_ARG		0
 # define ERR_OPEN_FAIL	1
 # define ERR_MAX_L_SIZE	3
 # define ERR_WRONG_EXT	4
 # define ERR_DST_FILE	5
+
 # include <stdio.h>
 # include <ctype.h>
 # include <string.h>
@@ -41,5 +48,6 @@ int			parser(FILE *srcFile, t_cmd **commands);
 void		symbol_table(t_cmd **commands, t_sbl **symbols);
 int			ft_get_address(t_sbl **symbols, char *sbl_name);
 void		code(FILE* dst_f, t_cmd **commands, t_sbl **symbols);
+void		ft_free_split(char **split_result);
 
 #endif

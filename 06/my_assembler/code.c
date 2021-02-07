@@ -51,6 +51,7 @@ static void	ft_print_bytes(FILE* dst_f, int nb, int size)
 		size--;
 	}
 	fprintf(dst_f, "%s", nb_binary);
+	free(nb_binary);
 }
 
 static void	ft_code_a(FILE* dst_f, t_cmd *cmd, t_sbl **symbols)

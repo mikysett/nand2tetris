@@ -50,14 +50,17 @@ static int		ft_readline(FILE *srcFile, char *line)
 
 static void		ft_lstadd_back(t_cmd **lst, t_cmd *new)
 {
-	if (!*lst)
+	t_cmd *curr;
+
+	curr = *lst;
+	if (!curr)
 	{
 		*lst = new;
 		return ;
 	}
-	while ((*lst)->next)
-		(lst) = &((*lst)->next);
-	(*lst)->next = new;
+	while (curr->next)
+		curr = curr->next;
+	curr->next = new;
 }
 
 static int		ft_count_args(char **args)
@@ -128,6 +131,7 @@ static t_cmd	*add_cmd(char **args, char *file_name)
 	cmd->file_name = 0;
 	cmd->arg1 = 0;
 	cmd->arg2 = 0;
+	cmd->next = 0;
 
 	if (cmd->type == push || cmd->type == pop)
 		cmd->file_name = strdup(file_name);
@@ -155,12 +159,14 @@ int				parser(FILE *srcFile, t_cmd **commands, char *file_name)
 	nb_l = 0;
 	while (!(read_result = ft_readline(srcFile, line)))
 	{
+		DEBUG_CODE(printf("line %3d: %s\n", nb_l, line);)
 		if (line[0] == '\0')
 			break ;
-		new_cmd = add_cmd(ft_split(line, ' '), file_name);
-		DEBUG_CODE(printf("line %3d: %s\n", nb_l, line);)
-		ft_lstadd_back(commands, new_cmd);
-		nb_l++;
+		if ((new_cmd = add_cmd(ft_split(line, ' '), file_name)))
+		{
+			ft_lstadd_back(commands, new_cmd);
+			nb_l++;
+		}
 	}
 	if (read_result == ERR_MAX_L_SIZE)
 		return (ERR_MAX_L_SIZE);

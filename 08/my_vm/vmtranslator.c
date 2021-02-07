@@ -130,6 +130,7 @@ static char	**ft_set_src_files(char *path, char *file)
 				strcat(src_files, "#");
 			}
 		}
+		closedir(src_dir);
 	}
 	return (ft_split(src_files, '#'));
 }
@@ -162,11 +163,13 @@ int			main(int argc, char **argv)
 	FILE	*dstFile;
 
 	char	*path;
+	char	*file_buff;
 	char	*file;
 
 	char	**src_files;
 	char	*dst_name;
 	char	file_sel[2048];
+	int		i;
 
 	t_cmd	**commands;
 	int		parse_result;
@@ -175,25 +178,28 @@ int			main(int argc, char **argv)
 		return (errorExit(ERR_NO_ARG));
 
 	path = strdup(argv[1]);
-	file = basename(strdup(argv[1]));
+	file_buff = strdup(argv[1]);
+	file = basename(file_buff);
 	if (ft_isextension(file, ".vm"))
 		*(strstr(path, file)) = '\0';
-	commands = malloc(sizeof(t_cmd *));
-
+	if (!(commands = malloc(sizeof(t_cmd *))))
+			return (errorExit(-1));
+	*commands = 0;
 	src_files = ft_set_src_files(path, file);
-	while (*src_files)
+	i = 0;
+	while (src_files[i])
 	{
-		DEBUG_CODE(printf("\nFile parsing: %s%s\n", path, *src_files);)
+		DEBUG_CODE(printf("\nFile parsing: %s%s\n", path, src_files[i]);)
 		strcpy(file_sel, path);
-		strcat(file_sel, *src_files);
+		strcat(file_sel, src_files[i]);
 		srcFile = fopen(file_sel, "r");
 		if(!srcFile)
 			return (errorExit(ERR_OPEN_FAIL));
-		parse_result = parser(srcFile, commands, *src_files);
+		parse_result = parser(srcFile, commands, src_files[i]);
 		fclose(srcFile);
 		if (parse_result)
 			return (errorExit(parse_result));
-		src_files++;
+		i++;
 	}
 
 	DEBUG_CODE(ft_print_cmd(commands);)
@@ -208,7 +214,7 @@ int			main(int argc, char **argv)
 
 	ft_free_split(src_files);
 	free(path);
-	free(file);
+	free(file_buff);
 	free(dst_name);
 	ft_free_cmd(commands);
 	return (0);

@@ -137,6 +137,10 @@ int			main(int argc, char **argv)
 
 	commands = malloc(sizeof(t_cmd *));
 	symbols = malloc(sizeof(t_sbl *));
+	if (!commands || !symbols)
+		return (errorExit(-1));
+	*commands = 0;
+	*symbols = 0;
 
 	srcFile = fopen(argv[1], "r");
 	if(!srcFile)

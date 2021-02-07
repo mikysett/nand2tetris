@@ -47,14 +47,17 @@ static int	ft_readline(FILE *srcFile, char *line)
 
 static void		ft_lstadd_back(t_cmd **lst, t_cmd *new)
 {
-	if (!*lst)
+	t_cmd *curr;
+
+	curr = *lst;
+	if (!curr)
 	{
 		*lst = new;
 		return ;
 	}
-	while ((*lst)->next)
-		(lst) = &((*lst)->next);
-	(*lst)->next = new;
+	while (curr->next)
+		curr = curr->next;
+	curr->next = new;
 }
 
 static t_cmd	*add_command_a(char *line)
@@ -62,12 +65,15 @@ static t_cmd	*add_command_a(char *line)
 	t_cmd *new_cmd;
 
 	new_cmd = malloc(sizeof(t_cmd));
+	if (!new_cmd)
+		return (0);
 	new_cmd->type = 'A';
 	line++;
 	new_cmd->symbol = strdup(line);
 	new_cmd->dest = 0;
 	new_cmd->comp = 0;
 	new_cmd->jmp = 0;
+	new_cmd->next = 0;
 	return (new_cmd);
 }
 
@@ -76,6 +82,8 @@ static t_cmd	*add_command_l(char *line)
 	t_cmd *new_cmd;
 
 	new_cmd = malloc(sizeof(t_cmd));
+	if (!new_cmd)
+		return (0);
 	new_cmd->type = 'L';
 	line++;
 	line[strlen(line) - 1] = '\0';
@@ -83,6 +91,7 @@ static t_cmd	*add_command_l(char *line)
 	new_cmd->dest = 0;
 	new_cmd->comp = 0;
 	new_cmd->jmp = 0;
+	new_cmd->next = 0;
 	return (new_cmd);
 }
 
@@ -93,6 +102,8 @@ static t_cmd	*add_command_c(char *line)
 	char	*isJump;
 
 	new_cmd = malloc(sizeof(t_cmd));
+	if (!new_cmd)
+		return (0);
 	isComp = strstr(line, "=");
 	isJump = strstr(line, ";");
 	new_cmd->type = 'C';
@@ -139,8 +150,11 @@ int				parser(FILE *srcFile, t_cmd **commands)
 			new_cmd = add_command_l(line);
 		else
 			new_cmd = add_command_c(line);
-		ft_lstadd_back(commands, new_cmd);
-		nb_l++;
+		if (new_cmd)
+		{
+			ft_lstadd_back(commands, new_cmd);
+			nb_l++;
+		}
 	}
 	if (read_result == ERR_MAX_L_SIZE)
 		return (ERR_MAX_L_SIZE);

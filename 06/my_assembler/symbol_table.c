@@ -2,14 +2,17 @@
 
 static void		add_sbl(t_sbl **lst, t_sbl *new)
 {
-	if (!*lst)
+	t_sbl *curr;
+
+	curr = *lst;
+	if (!curr)
 	{
 		*lst = new;
 		return ;
 	}
-	while ((*lst)->next)
-		(lst) = &((*lst)->next);
-	(*lst)->next = new;
+	while (curr->next)
+		curr = curr->next;
+	curr->next = new;
 }
 
 static t_sbl	*new_sbl(char *symbol, int address)
@@ -126,7 +129,6 @@ static void		ft_print_sbls(t_sbl **sbl)
 
 void			symbol_table(t_cmd **commands, t_sbl **symbols)
 {
-
 	ft_init_variables(symbols);
 	ft_set_labels(commands, symbols);
 	ft_set_variables(commands, symbols);

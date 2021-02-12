@@ -1,6 +1,7 @@
 {
 	"files.associations": {
 		"type_traits": "c",
-		"vmtranslator.h": "c"
+		"vmtranslator.h": "c",
+		"jackanalyzer.h": "c"
 	}
 }

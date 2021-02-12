@@ -1,5 +1,5 @@
-#ifndef ASSEMBLER_H
-# define ASSEMBLER_H
+#ifndef VMTRANSLATOR_H
+# define VMTRANSLATOR_H
 
 # define DEBUG_MODE		0
 # if DEBUG_MODE == 1

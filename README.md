@@ -24,7 +24,9 @@ In order to see verbose output in `assembler.h` and `vmtranslator.h` switch `DEB
 5. Computer Architecture
 6. Assembler
 7. Virtual Machine I
-8. Virtual Machine II
+8. High-Level Language (skipped)
+9. Virtual Machine II
+10. Compiler I
 
 
 The tools and initial setup for the exercises can be found at [nand2tetris.org](https://www.nand2tetris.org/)

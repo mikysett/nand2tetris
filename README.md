@@ -12,8 +12,11 @@ I did some tests comparing .asm files from other nand2tetris repos and this impl
 ## Compiling the programs
 Every program have a `Makefile` with a `make` rule.
 
-## Debug mode
+## Debug mode (up to ex10)
 In order to see verbose output in `assembler.h` and `vmtranslator.h` switch `DEBUG_MODE` to 1.
+
+## Debug mode (from ex11)
+In order to see verbose output now you can just use `make debug` rule.
 
 ## Solved exercises:
 

@@ -8,7 +8,8 @@ int					errorExit(t_err err)
 			printf("Error: Please provide a .jack file or directory\n");
 			return (0);
 		case ERR_OPEN_FAIL:
-			printf("Error: Can't open the file\n");
+			perror("error");
+			// printf("Error: Can't open the file\n");
 			return (0);
 		case ERR_OPEN_DIR_FAIL:
 			printf("Error: Can't open the directory\n");
@@ -179,7 +180,9 @@ int			main(int argc, char **argv)
 	file_sel = *src_files;
 	while (file_sel)
 	{
-		DEBUG_CODE(printf("\nFile parsing: %s\n", file_sel->src_name);)
+		DEBUG_CODE(printf("\nFile parsing: %s in %s\n",
+			file_sel->src_name,
+			file_sel->dst_name);)
 		srcFile = fopen(file_sel->src_name, "r");
 		if(!srcFile)
 			return (errorExit(ERR_OPEN_FAIL));
@@ -187,9 +190,9 @@ int			main(int argc, char **argv)
 		if (!dstFile)
 			return (errorExit(ERR_DST_FILE));
 		tokens = jackTokenizer(srcFile);
-		printf("<tokens>\n");
+		DEBUG_CODE(printf("<tokens>\n");)
 		compilationEngine(dstFile, *tokens);
-		printf("</tokens>\n");
+		DEBUG_CODE(printf("</tokens>\n");)
 		ft_free_tokens(tokens);
 		fclose(srcFile);
 		fclose(dstFile);

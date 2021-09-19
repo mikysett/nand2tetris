@@ -1,6 +1,4 @@
-// As always to compile use 'make'
-
-#include "jackAnalyzer.h"
+#include "jackCompiler.h"
 
 static int			ft_is_symbol(char c)
 {
@@ -78,35 +76,11 @@ static t_keyword	ft_is_keyword(char *str)
 	return (0);
 }
 
-static void			ft_lstadd_back(t_token_lst **lst, t_token_lst *new)
+static t_token	*add_token(void)
 {
-	t_token_lst *curr;
+	t_token *new_token;
 
-	curr = *lst;
-	if (!curr)
-	{
-		*lst = new;
-		return ;
-	}
-	while (curr->next)
-		curr = curr->next;
-	curr->next = new;
-}
-
-static t_token_lst	*add_token(void)
-{
-	t_token_lst *new_token;
-
-	new_token = malloc(sizeof(t_token_lst));
-	if (!new_token)
-		return (0);
-	new_token->tokenType = 0;
-	new_token->keyword = 0;
-	new_token->symbol = 0;
-	new_token->identifier = 0;
-	new_token->intval = 0;
-	new_token->stringval = 0;
-	new_token->next = 0;
+	new_token = calloc(1, sizeof(t_token));
 	return (new_token);
 }
 
@@ -235,18 +209,17 @@ char				*ft_copy_stringconst(char *str)
 	return (start_stringval);
 }
 
-t_token_lst			**jackTokenizer(FILE *src)
+t_list			**jackTokenizer(FILE *src)
 {
 	char		*nextToken;
 	size_t		max_token_len;
-	t_token_lst *new_token;
-	t_token_lst	**tokens;
+	t_token 	*new_token;
+	t_list		**tokens;
 
-	tokens = malloc(sizeof(t_token_lst *));
+	tokens = calloc(1, sizeof(t_list *));
 	if (!tokens)
 		return (0);
-	*tokens = 0;
-	nextToken = malloc(sizeof(char) * 33);
+	nextToken = calloc(33, 1);
 	if (!nextToken)
 		return (0);
 	max_token_len = 32;
@@ -278,7 +251,7 @@ t_token_lst			**jackTokenizer(FILE *src)
 			new_token->tokenType = IDENTIFIER;
 			new_token->identifier = strdup(nextToken);
 		}
-		ft_lstadd_back(tokens, new_token);
+		ft_lstadd_back(tokens, ft_lstnew(new_token));
 		DEBUG_CODE(printf("token: %s\n", nextToken);)
 	}
 	free(nextToken);
